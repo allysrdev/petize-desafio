@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { GithubRepo, GithubUser } from "../types/github";
+import type { GithubRepo, GithubUser } from "../schemas/github.schema";
 import { getUser, getUserRepos } from "../services/githubService";
 
 export function useGithubUser() {

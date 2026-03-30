@@ -31,6 +31,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { useGithubUser } from "../../hooks/useGithubUser";
 import { getRelativeDate } from "../../utils/getRelativeDate";
+import { nullableToUndefined } from "../../helpers/nullableToUndefined";
 
 export default function Profile() {
   const { username } = useParams();
@@ -152,7 +153,7 @@ export default function Profile() {
 
         <div className="flex gap-3 items-center">
           <Avatar.Root size="lg">
-            <Avatar.Fallback name={user?.name} />
+            <Avatar.Fallback name={nullableToUndefined(user?.name)} />
             <Avatar.Image src={user?.avatar_url} />
           </Avatar.Root>
           <div className="flex flex-col items-start">
@@ -220,7 +221,7 @@ export default function Profile() {
 
             <div className="flex gap-3 items-center">
               <Avatar.Root size="lg">
-                <Avatar.Fallback name={user?.name} />
+                <Avatar.Fallback name={nullableToUndefined(user?.name)} />
                 <Avatar.Image src={user?.avatar_url} />
               </Avatar.Root>
               <div className="flex flex-col items-start">
@@ -342,7 +343,7 @@ export default function Profile() {
             <RepositoryCard
               key={repo.id}
               name={repo.name}
-              description={repo.description}
+              description={repo.description ?? "Sem descrição"}
               stars={repo.stargazers_count}
               updated_at={getRelativeDate(repo.updated_at)}
               url={repo.html_url}
