@@ -6,6 +6,8 @@ import {
   Input,
   InputGroup,
   Span,
+  Spinner,
+  VStack,
 } from "@chakra-ui/react";
 import {
   LuBuilding2,
@@ -18,8 +20,41 @@ import {
   LuUsers,
 } from "react-icons/lu";
 import RepositoryCard from "../../components/Profile/RepositoryCard";
-
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useGithubUser } from "../../hooks/useGithubUser";
+import { getRelativeDate } from "../../utils/getRelativeDate";
 export default function Profile() {
+  const { username } = useParams();
+  const navigate = useNavigate();
+  const { user, repos, loading, fetchGithubData, error } = useGithubUser();
+
+  useEffect(() => {
+    if (!username) return;
+
+    fetchGithubData(username);
+  }, [username, fetchGithubData]);
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <VStack gap={4}>
+          <Spinner size="xl" color="var(--purple)" />
+          <Span fontSize="lg">Buscando usuário...</Span>
+        </VStack>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center flex-col gap-5">
+        <Heading>Erro</Heading>
+        <Span>{error}</Span>
+        <Button onClick={() => navigate("/")}>Nova busca</Button>
+      </div>
+    );
+  }
   return (
     <div className="w-full h-full flex flex-col">
       {/* Desktop-only header */}
@@ -53,6 +88,7 @@ export default function Profile() {
           </InputGroup>
         </div>
       </header>
+
       {/* Mobile Profile Header */}
       <Box
         className="flex flex-col gap-5 p-5! text-zinc-600 sm:hidden"
@@ -62,114 +98,132 @@ export default function Profile() {
 
         <div className="flex gap-3 items-center">
           <Avatar.Root size="lg">
-            <Avatar.Fallback name="John Doe" />
-            <Avatar.Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/John_Doe%2C_born_John_Nommensen_Duchac.jpg/960px-John_Doe%2C_born_John_Nommensen_Duchac.jpg" />
+            <Avatar.Fallback name={user?.name} />
+            <Avatar.Image src={user?.avatar_url} />
           </Avatar.Root>
           <div className="flex flex-col items-start">
-            <Heading color="black">John Doe</Heading>
-            <Span fontWeight="light">@johndoe</Span>
+            <Heading color="black">{user?.name}</Heading>
+            <Span fontWeight="light">@{user?.name}</Span>
           </div>
         </div>
         {/* Followers / Following */}
         <div className="flex gap-5 ">
           <div className="flex items-center gap-2">
             <LuUsers />
-            <Span>250 seguidores</Span>
+            <Span>{user?.followers} seguidores</Span>
           </div>
           <div className="flex items-center gap-2">
             <LuHeart />
-            <Span>25 seguindo</Span>
+            <Span>{user?.following} seguindo</Span>
           </div>
         </div>
         {/* User Description */}
         <div className="w-full text-left">
-          <Span>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-            vulputate libero et velit interdum, ac aliquet odio mattis.
-          </Span>
+          <Span>{user?.bio}</Span>
         </div>
         {/* More user info */}
         <div className="flex flex-wrap gap-5 justify-center text-[13px]!">
-          <div className="flex gap-3 items-center">
-            <LuBuilding2 size={16} />
-            <Span>Petize</Span>
-          </div>
-          <div className="flex gap-3 items-center">
-            <LuMapPin size={16} />
-            <Span>São Paulo</Span>
-          </div>
-          <div className="flex gap-3 items-center">
-            <LuMail size={16} />
-            <Span>john.doe@petize.com.br</Span>
-          </div>
-          <div className="flex gap-3 items-center">
-            <LuLink size={16} />
-            <Span>www.johndoe.com</Span>
-          </div>
-          <div className="flex gap-3 items-center">
-            <LuTwitter size={16} />
-            <Span>@johndoe</Span>
-          </div>
+          {user?.company && (
+            <div className="flex gap-3 items-center">
+              <LuBuilding2 size={16} />
+              <Span>{user?.company}</Span>
+            </div>
+          )}
+
+          {user?.location && (
+            <div className="flex gap-3 items-center">
+              <LuMapPin size={16} />
+              <Span>{user.location}</Span>
+            </div>
+          )}
+          {user?.email && (
+            <div className="flex gap-3 items-center">
+              <LuMail size={16} />
+              <Span>{user.email}</Span>
+            </div>
+          )}
+          {user?.blog && (
+            <div className="flex gap-3 items-center">
+              <LuLink size={16} />
+              <Span>{user.blog}</Span>
+            </div>
+          )}
+
+          {user?.twitter_username && (
+            <div className="flex gap-3 items-center">
+              <LuTwitter size={16} />
+              <Span>@{user.twitter_username}</Span>
+            </div>
+          )}
         </div>
       </Box>
 
       <div className="w-full flex items-start justify-start">
-        <aside className="hidden sm:flex ">
+        <aside className="hidden sm:flex w-[30%]">
           {/* Desktop Profile Header */}
           <Box className="flex flex-col gap-5 p-5! text-zinc-600">
             {/* Avatar & user Info */}
 
             <div className="flex gap-3 items-center">
               <Avatar.Root size="lg">
-                <Avatar.Fallback name="John Doe" />
-                <Avatar.Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/John_Doe%2C_born_John_Nommensen_Duchac.jpg/960px-John_Doe%2C_born_John_Nommensen_Duchac.jpg" />
+                <Avatar.Fallback name={user?.name} />
+                <Avatar.Image src={user?.avatar_url} />
               </Avatar.Root>
               <div className="flex flex-col items-start">
-                <Heading color="black">John Doe</Heading>
-                <Span fontWeight="light">@johndoe</Span>
+                <Heading color="black">{user?.name}</Heading>
+                <Span fontWeight="light">@{user?.login}</Span>
               </div>
             </div>
             {/* User Description */}
             <div className="w-full text-left">
-              <Span>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-                vulputate libero et velit interdum, ac aliquet odio mattis.
-              </Span>
+              <Span>{user?.bio}</Span>
             </div>
             {/* Followers / Following */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <LuUsers />
-                <Span>250 seguidores</Span>
+                <Span>{user?.followers} seguidores</Span>
               </div>
               <div className="flex items-center gap-2">
                 <LuHeart />
-                <Span>25 seguindo</Span>
+                <Span>{user?.following} seguindo</Span>
               </div>
             </div>
 
             {/* More user info */}
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-3 items-center">
-                <LuBuilding2 size={16} />
-                <Span>Petize</Span>
-              </div>
-              <div className="flex gap-3 items-center">
-                <LuMapPin size={16} />
-                <Span>São Paulo</Span>
-              </div>
-              <div className="flex gap-3 items-center">
-                <LuMail size={16} />
-                <Span>john.doe@petize.com.br</Span>
-              </div>
-              <div className="flex gap-3 items-center">
-                <LuLink size={16} />
-                <Span>www.johndoe.com</Span>
-              </div>
-              <div className="flex gap-3 items-center">
-                <LuTwitter size={16} />
-                <Span>@johndoe</Span>
-              </div>
+            <div className="flex flex-col gap-2 w-[70%]">
+              {user?.company && (
+                <div className="flex gap-3 items-center">
+                  <LuBuilding2 size={16} />
+                  <Span>{user?.company}</Span>
+                </div>
+              )}
+
+              {user?.location && (
+                <div className="flex gap-3 items-center">
+                  <LuMapPin size={16} />
+                  <Span>{user.location}</Span>
+                </div>
+              )}
+              {user?.email && (
+                <div className="flex gap-3 items-center">
+                  <LuMail size={16} />
+                  <Span>{user.email}</Span>
+                </div>
+              )}
+              {user?.blog && (
+                <div className="flex gap-3 items-center">
+                  <LuLink size={16} />
+                  <Span>{user.blog}</Span>
+                </div>
+              )}
+
+              {user?.twitter_username && (
+                <div className="flex gap-3 items-center">
+                  <LuTwitter size={16} />
+                  <Span>@{user.twitter_username}</Span>
+                </div>
+              )}
             </div>
 
             <Button
@@ -184,56 +238,18 @@ export default function Profile() {
         {/* Repositories */}
 
         <Box className="flex flex-col overflow-auto">
-          <RepositoryCard
-            name="Nome do Repositorio"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-              turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
-              nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
-              tellus elit sed risus. Maecenas eget condimentum velit, sit amet
-              feugiat lectus."
-            stars={100}
-            updated_at="Atualizado há 2 dias"
-          />
-          <RepositoryCard
-            name="Nome do Repositorio"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-              turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
-              nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
-              tellus elit sed risus. Maecenas eget condimentum velit, sit amet
-              feugiat lectus."
-            stars={100}
-            updated_at="Atualizado há 2 dias"
-          />
-          <RepositoryCard
-            name="Nome do Repositorio"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-              turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
-              nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
-              tellus elit sed risus. Maecenas eget condimentum velit, sit amet
-              feugiat lectus."
-            stars={100}
-            updated_at="Atualizado há 2 dias"
-          />
-          <RepositoryCard
-            name="Nome do Repositorio"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-              turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
-              nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
-              tellus elit sed risus. Maecenas eget condimentum velit, sit amet
-              feugiat lectus."
-            stars={100}
-            updated_at="Atualizado há 2 dias"
-          />
-          <RepositoryCard
-            name="Nome do Repositorio"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-              turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
-              nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
-              tellus elit sed risus. Maecenas eget condimentum velit, sit amet
-              feugiat lectus."
-            stars={100}
-            updated_at="Atualizado há 2 dias"
-          />
+          {repos &&
+            repos.map((repo) => {
+              return (
+                <RepositoryCard
+                  key={repo.id}
+                  name={repo.name}
+                  description={repo.description}
+                  stars={repo.stargazers_count}
+                  updated_at={getRelativeDate(repo.updated_at)}
+                />
+              );
+            })}
         </Box>
       </div>
     </div>
