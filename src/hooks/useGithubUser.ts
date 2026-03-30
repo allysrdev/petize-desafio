@@ -10,29 +10,34 @@ export function useGithubUser() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [sort, setSort] = useState("updated");
+  const [direction, setDirection] = useState("desc");
 
-  const fetchInitialData = useCallback(async (username: string) => {
-    try {
-      setLoadingUser(true);
-      setLoadingMore(true);
-      setError(null);
-      setPage(1);
+  const fetchInitialData = useCallback(
+    async (username: string) => {
+      try {
+        setLoadingUser(true);
+        setLoadingMore(true);
+        setError(null);
+        setPage(1);
 
-      const userData = await getUser(username);
-      const reposData = await getUserRepos(username, 1);
+        const userData = await getUser(username);
+        const reposData = await getUserRepos(username, 1, sort, direction);
 
-      setUser(userData);
-      setRepos(reposData);
-      setHasMore(reposData.length === 10);
-    } catch (err) {
-      setError((err as Error).message);
-      setUser(null);
-      setRepos([]);
-    } finally {
-      setLoadingUser(false);
-      setLoadingMore(false);
-    }
-  }, []);
+        setUser(userData);
+        setRepos(reposData);
+        setHasMore(reposData.length === 10);
+      } catch (err) {
+        setError((err as Error).message);
+        setUser(null);
+        setRepos([]);
+      } finally {
+        setLoadingUser(false);
+        setLoadingMore(false);
+      }
+    },
+    [sort, direction],
+  );
 
   const loadMoreRepos = useCallback(
     async (username: string) => {
@@ -42,7 +47,12 @@ export function useGithubUser() {
         setLoadingMore(true);
         const nextPage = page + 1;
 
-        const newRepos = await getUserRepos(username, nextPage);
+        const newRepos = await getUserRepos(
+          username,
+          nextPage,
+          sort,
+          direction,
+        );
 
         setRepos((prev) => [...prev, ...newRepos]);
         setPage(nextPage);
@@ -53,7 +63,7 @@ export function useGithubUser() {
         setLoadingMore(false);
       }
     },
-    [page, loadingMore, hasMore],
+    [page, loadingMore, hasMore, sort, direction],
   );
 
   return {
@@ -65,5 +75,9 @@ export function useGithubUser() {
     hasMore,
     fetchInitialData,
     loadMoreRepos,
+    sort,
+    direction,
+    setSort,
+    setDirection,
   };
 }

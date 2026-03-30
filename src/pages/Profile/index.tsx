@@ -2,10 +2,16 @@ import {
   Avatar,
   Box,
   Button,
+  createListCollection,
   Heading,
   Input,
   InputGroup,
   Link,
+  SelectContent,
+  SelectItem,
+  SelectRoot,
+  SelectTrigger,
+  SelectValueText,
   Span,
   Spinner,
   VStack,
@@ -25,6 +31,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { useGithubUser } from "../../hooks/useGithubUser";
 import { getRelativeDate } from "../../utils/getRelativeDate";
+import { Portal } from "@chakra-ui/react";
+
 export default function Profile() {
   const { username } = useParams();
   const navigate = useNavigate();
@@ -36,8 +44,27 @@ export default function Profile() {
     loadMoreRepos,
     fetchInitialData,
     error,
+    sort,
+    direction,
+    setSort,
+    setDirection,
   } = useGithubUser();
   const containerRef = useRef<HTMLDivElement>(null);
+  const sortCollection = createListCollection({
+    items: [
+      { label: "Última atualização", value: "updated" },
+      { label: "Data de criação", value: "created" },
+      { label: "Último push", value: "pushed" },
+      { label: "Nome", value: "full_name" },
+    ],
+  });
+
+  const directionCollection = createListCollection({
+    items: [
+      { label: "Descendente", value: "desc" },
+      { label: "Ascendente", value: "asc" },
+    ],
+  });
 
   useEffect(() => {
     const el = containerRef.current;
@@ -265,9 +292,53 @@ export default function Profile() {
             </Button>
           </Box>
         </aside>
-        {/* Repositories */}
 
-        <Box ref={containerRef} className="flex flex-col overflow-auto h-200">
+        {/* Repositories */}
+        <Box
+          ref={containerRef}
+          className="flex flex-col overflow-auto h-200 w-full"
+        >
+          <div className="flex gap-3 items-center">
+            {/* SORT */}
+            <SelectRoot
+              collection={sortCollection}
+              value={[sort]}
+              onValueChange={(e) => setSort(e.value[0])}
+              width="200px"
+            >
+              <SelectTrigger className="border border-zinc-300 rounded-md shadow-sm hover:border-zinc-400">
+                <SelectValueText placeholder="Ordenar por" />
+              </SelectTrigger>
+
+              <SelectContent position="fixed">
+                {sortCollection.items.map((item) => (
+                  <SelectItem item={item} key={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </SelectRoot>
+
+            {/* DIRECTION */}
+            <SelectRoot
+              collection={directionCollection}
+              value={[direction]}
+              onValueChange={(e) => setDirection(e.value[0])}
+              width="140px"
+            >
+              <SelectTrigger className="border border-zinc-300 rounded-md shadow-sm hover:border-zinc-400">
+                <SelectValueText placeholder="Direção" />
+              </SelectTrigger>
+
+              <SelectContent position="fixed">
+                {directionCollection.items.map((item) => (
+                  <SelectItem item={item} key={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </SelectRoot>
+          </div>
           {repos.map((repo) => (
             <RepositoryCard
               key={repo.id}

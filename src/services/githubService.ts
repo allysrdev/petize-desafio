@@ -21,12 +21,12 @@ export async function getUser(username: string): Promise<GithubUser> {
 export async function getUserRepos(
   username: string,
   page: number,
+  sort: string,
+  direction: string,
 ): Promise<GithubRepo[]> {
   const response = await fetch(
-    `${BASE_URL}/users/${username}/repos?per_page=10&page=${page}&per_page=10`,
-    {
-      headers,
-    },
+    `${BASE_URL}/users/${username}/repos?per_page=10&page=${page}&sort=${sort}&direction=${direction}`,
+    { headers },
   );
 
   if (!response.ok) {
