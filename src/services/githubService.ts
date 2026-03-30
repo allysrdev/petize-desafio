@@ -18,10 +18,16 @@ export async function getUser(username: string): Promise<GithubUser> {
   return response.json();
 }
 
-export async function getUserRepos(username: string): Promise<GithubRepo[]> {
-  const response = await fetch(`${BASE_URL}/users/${username}/repos`, {
-    headers,
-  });
+export async function getUserRepos(
+  username: string,
+  page: number,
+): Promise<GithubRepo[]> {
+  const response = await fetch(
+    `${BASE_URL}/users/${username}/repos?per_page=10&page=${page}&per_page=10`,
+    {
+      headers,
+    },
+  );
 
   if (!response.ok) {
     throw new Error("Erro ao buscar repositórios");

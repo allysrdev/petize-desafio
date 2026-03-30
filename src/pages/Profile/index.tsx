@@ -5,6 +5,7 @@ import {
   Heading,
   Input,
   InputGroup,
+  Link,
   Span,
   Spinner,
   VStack,
@@ -21,21 +22,48 @@ import {
 } from "react-icons/lu";
 import RepositoryCard from "../../components/Profile/RepositoryCard";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useGithubUser } from "../../hooks/useGithubUser";
 import { getRelativeDate } from "../../utils/getRelativeDate";
 export default function Profile() {
   const { username } = useParams();
   const navigate = useNavigate();
-  const { user, repos, loading, fetchGithubData, error } = useGithubUser();
+  const {
+    user,
+    repos,
+    loadingUser,
+    loadingMore,
+    loadMoreRepos,
+    fetchInitialData,
+    error,
+  } = useGithubUser();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+
+    const handleScroll = () => {
+      if (!el) return;
+
+      const isBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
+
+      if (isBottom) {
+        loadMoreRepos(username!);
+      }
+    };
+
+    el?.addEventListener("scroll", handleScroll);
+
+    return () => el?.removeEventListener("scroll", handleScroll);
+  }, [loadMoreRepos, username]);
 
   useEffect(() => {
     if (!username) return;
 
-    fetchGithubData(username);
-  }, [username, fetchGithubData]);
+    fetchInitialData(username);
+  }, [username, fetchInitialData]);
 
-  if (loading) {
+  if (loadingUser) {
     return (
       <div className="h-screen flex items-center justify-center">
         <VStack gap={4}>
@@ -214,14 +242,16 @@ export default function Profile() {
               {user?.blog && (
                 <div className="flex gap-3 items-center">
                   <LuLink size={16} />
-                  <Span>{user.blog}</Span>
+                  <Link href={user.blog}>{user.blog}</Link>
                 </div>
               )}
 
               {user?.twitter_username && (
                 <div className="flex gap-3 items-center">
                   <LuTwitter size={16} />
-                  <Span>@{user.twitter_username}</Span>
+                  <Link href={`https://x.com/${user.twitter_username}`}>
+                    @{user.twitter_username}
+                  </Link>
                 </div>
               )}
             </div>
@@ -237,19 +267,19 @@ export default function Profile() {
         </aside>
         {/* Repositories */}
 
-        <Box className="flex flex-col overflow-auto">
-          {repos &&
-            repos.map((repo) => {
-              return (
-                <RepositoryCard
-                  key={repo.id}
-                  name={repo.name}
-                  description={repo.description}
-                  stars={repo.stargazers_count}
-                  updated_at={getRelativeDate(repo.updated_at)}
-                />
-              );
-            })}
+        <Box ref={containerRef} className="flex flex-col overflow-auto h-200">
+          {repos.map((repo) => (
+            <RepositoryCard
+              key={repo.id}
+              name={repo.name}
+              description={repo.description}
+              stars={repo.stargazers_count}
+              updated_at={getRelativeDate(repo.updated_at)}
+              url={repo.html_url}
+            />
+          ))}
+
+          {loadingMore && <p>Carregando mais...</p>}
         </Box>
       </div>
     </div>
