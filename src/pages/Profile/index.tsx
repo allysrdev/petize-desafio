@@ -31,7 +31,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { useGithubUser } from "../../hooks/useGithubUser";
 import { getRelativeDate } from "../../utils/getRelativeDate";
-import { Portal } from "@chakra-ui/react";
 
 export default function Profile() {
   const { username } = useParams();

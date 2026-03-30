@@ -1,4 +1,10 @@
-import type { GithubRepo, GithubUser } from "../types/github";
+import z from "zod";
+import {
+  GithubRepoSchema,
+  GithubUserSchema,
+  type GithubRepo,
+  type GithubUser,
+} from "../schemas/github.schema";
 
 const BASE_URL = "https://api.github.com";
 
@@ -15,7 +21,9 @@ export async function getUser(username: string): Promise<GithubUser> {
     throw new Error("Usuário não encontrado");
   }
 
-  return response.json();
+  const data = await response.json();
+
+  return GithubUserSchema.parse(data);
 }
 
 export async function getUserRepos(
@@ -33,5 +41,7 @@ export async function getUserRepos(
     throw new Error("Erro ao buscar repositórios");
   }
 
-  return response.json();
+  const data = await response.json();
+
+  return z.array(GithubRepoSchema).parse(data);
 }
