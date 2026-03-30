@@ -1,5 +1,47 @@
-import { Heading, Input } from "@chakra-ui/react";
+import { Heading, Input, InputGroup } from "@chakra-ui/react";
+import { useState } from "react";
+import { LuSearch } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  return <div>Home</div>;
+  const [username, setUsername] = useState<string>("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && username.trim()) {
+      navigate(`/profile/${username}`);
+    }
+  };
+  return (
+    <div className="w-full h-screen flex items-center justify-center flex-col gap-10 p-10">
+      <div className="flex gap-5">
+        <Heading
+          className="text-5xl! sm:text-7xl!"
+          fontWeight="normal"
+          color="var(--blue) "
+        >
+          Search
+        </Heading>
+        <Heading
+          className="text-5xl! sm:text-7xl!"
+          fontWeight="normal"
+          color="var(--purple)"
+        >
+          d_evs
+        </Heading>
+      </div>
+      <InputGroup
+        startElement={<LuSearch size={20} />}
+        className="w-full max-w-sm"
+      >
+        <Input
+          placeholder="Search"
+          className="sm:w-148 sm:h-12"
+          css={{ "--focus-color": " var(--purple)" }}
+          onKeyDown={(e) => handleSearch(e)}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+      </InputGroup>
+    </div>
+  );
 }

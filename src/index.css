@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+:root {
+  --purple: #8c19d2;
+  --blue: #0069ca;
+  --profile-backgrund-mobile: #eaddff;
+}
+
 #root {
   width: 1126px;
   max-width: 100%;
