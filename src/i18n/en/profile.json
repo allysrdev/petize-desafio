@@ -1,0 +1,38 @@
+{
+  "search": "Search",
+  "search_placeholder": "John Doe",
+
+  "followers": "followers",
+  "following": "following",
+
+  "contact": "Contact",
+
+  "no_description": "No description",
+
+  "sort_by": "Sort by",
+  "direction": "Direction",
+
+  "sort": {
+    "updated": "Last updated",
+    "created": "Creation date",
+    "pushed": "Last push",
+    "full_name": "Name"
+  },
+
+  "direction_options": {
+    "asc": "Ascending",
+    "desc": "Descending"
+  },
+
+  "loading_user": "Loading user...",
+  "loading_more": "Loading more...",
+
+  "updated_days_one": "{{count}} day ago",
+  "updated_days_other": "{{count}} days ago",
+
+  "updated_hours_one": "{{count}} hour ago",
+  "updated_hours_other": "{{count}} hours ago",
+
+  "updated_minutes_one": "{{count}} minute ago",
+  "updated_minutes_other": "{{count}} minutes ago"
+}

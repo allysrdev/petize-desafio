@@ -18,7 +18,7 @@ export async function getUser(username: string): Promise<GithubUser> {
   });
 
   if (!response.ok) {
-    throw new Error("Usuário não encontrado");
+    throw new Error("user_not_found");
   }
 
   const data = await response.json();
@@ -38,7 +38,7 @@ export async function getUserRepos(
   );
 
   if (!response.ok) {
-    throw new Error("Erro ao buscar repositórios");
+    throw new Error("fetch_repos_error");
   }
 
   const data = await response.json();

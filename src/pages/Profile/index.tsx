@@ -32,10 +32,12 @@ import { useEffect, useRef } from "react";
 import { useGithubUser } from "../../hooks/useGithubUser";
 import { getRelativeDate } from "../../utils/getRelativeDate";
 import { nullableToUndefined } from "../../helpers/nullableToUndefined";
+import { useTranslation } from "react-i18next";
 
 export default function Profile() {
   const { username } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation(["profile", "errors"]);
   const {
     user,
     repos,
@@ -52,17 +54,17 @@ export default function Profile() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sortCollection = createListCollection({
     items: [
-      { label: "Última atualização", value: "updated" },
-      { label: "Data de criação", value: "created" },
-      { label: "Último push", value: "pushed" },
-      { label: "Nome", value: "full_name" },
+      { label: t("profile:sort.updated"), value: "updated" },
+      { label: t("profile:sort.created"), value: "created" },
+      { label: t("profile:sort.pushed"), value: "pushed" },
+      { label: t("profile:sort.full_name"), value: "full_name" },
     ],
   });
 
   const directionCollection = createListCollection({
     items: [
-      { label: "Descendente", value: "desc" },
-      { label: "Ascendente", value: "asc" },
+      { label: t("profile:direction_options.desc"), value: "desc" },
+      { label: t("profile:direction_options.asc"), value: "asc" },
     ],
   });
 
@@ -95,7 +97,7 @@ export default function Profile() {
       <div className="h-screen flex items-center justify-center">
         <VStack gap={4}>
           <Spinner size="xl" color="var(--purple)" />
-          <Span fontSize="lg">Buscando usuário...</Span>
+          <Span fontSize="lg">{t("profile:loading_user")}</Span>
         </VStack>
       </div>
     );
@@ -104,14 +106,14 @@ export default function Profile() {
   if (error) {
     return (
       <div className="w-full h-screen flex items-center justify-center flex-col gap-5">
-        <Heading>Erro</Heading>
-        <Span>{error}</Span>
-        <Button onClick={() => navigate("/")}>Nova busca</Button>
+        <Heading>{t("errors:error")}</Heading>
+        <Span>{t(`errors:${error}`)}</Span>
+        <Button onClick={() => navigate("/")}>{t("errors:new_search")}</Button>
       </div>
     );
   }
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col gap-5!">
       {/* Desktop-only header */}
       <header className="hidden sm:block w-full py-5!">
         <div className="flex gap-30 w-full items-start ">
@@ -136,7 +138,7 @@ export default function Profile() {
             className="w-full max-w-3xl"
           >
             <Input
-              placeholder="John Doe"
+              placeholder={t("profile:search_placeholder")}
               className="sm:w-148 sm:h-12"
               css={{ "--focus-color": " var(--purple)" }}
             />
@@ -158,18 +160,22 @@ export default function Profile() {
           </Avatar.Root>
           <div className="flex flex-col items-start">
             <Heading color="black">{user?.name}</Heading>
-            <Span fontWeight="light">@{user?.name}</Span>
+            <Span fontWeight="light">@{user?.login}</Span>
           </div>
         </div>
         {/* Followers / Following */}
         <div className="flex gap-5 ">
           <div className="flex items-center gap-2">
             <LuUsers />
-            <Span>{user?.followers} seguidores</Span>
+            <Span>
+              {user?.followers} {t("profile:followers")}
+            </Span>
           </div>
           <div className="flex items-center gap-2">
             <LuHeart />
-            <Span>{user?.following} seguindo</Span>
+            <Span>
+              {user?.following} {t("profile:following")}
+            </Span>
           </div>
         </div>
         {/* User Description */}
@@ -237,11 +243,15 @@ export default function Profile() {
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <LuUsers />
-                <Span>{user?.followers} seguidores</Span>
+                <Span>
+                  {user?.followers} {t("profile:followers")}
+                </Span>
               </div>
               <div className="flex items-center gap-2">
                 <LuHeart />
-                <Span>{user?.following} seguindo</Span>
+                <Span>
+                  {user?.following} {t("profile:following")}
+                </Span>
               </div>
             </div>
 
@@ -288,7 +298,7 @@ export default function Profile() {
               backgroundColor="var(--purple)"
               fontWeight="bold"
             >
-              Contato
+              {t("profile:contact")}
             </Button>
           </Box>
         </aside>
@@ -298,7 +308,7 @@ export default function Profile() {
           ref={containerRef}
           className="flex flex-col overflow-auto h-200 w-full"
         >
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-3 items-center justify-center">
             {/* SORT */}
             <SelectRoot
               collection={sortCollection}
@@ -307,7 +317,7 @@ export default function Profile() {
               width="200px"
             >
               <SelectTrigger className="border border-zinc-300 rounded-md shadow-sm hover:border-zinc-400">
-                <SelectValueText placeholder="Ordenar por" />
+                <SelectValueText placeholder={t("profile:sort_by")} />
               </SelectTrigger>
 
               <SelectContent position="fixed">
@@ -327,7 +337,7 @@ export default function Profile() {
               width="140px"
             >
               <SelectTrigger className="border border-zinc-300 rounded-md shadow-sm hover:border-zinc-400">
-                <SelectValueText placeholder="Direção" />
+                <SelectValueText placeholder={t("profile:direction")} />
               </SelectTrigger>
 
               <SelectContent position="fixed">
@@ -343,14 +353,14 @@ export default function Profile() {
             <RepositoryCard
               key={repo.id}
               name={repo.name}
-              description={repo.description ?? "Sem descrição"}
+              description={repo.description ?? t("profile:no_description")}
               stars={repo.stargazers_count}
-              updated_at={getRelativeDate(repo.updated_at)}
+              updated_at={getRelativeDate(repo.updated_at, t)}
               url={repo.html_url}
             />
           ))}
 
-          {loadingMore && <p>Carregando mais...</p>}
+          {loadingMore && <p>{t("profile:loading_more")}</p>}
         </Box>
       </div>
     </div>

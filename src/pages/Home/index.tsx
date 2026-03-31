@@ -1,11 +1,13 @@
 import { Heading, Input, InputGroup } from "@chakra-ui/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { LuSearch } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [username, setUsername] = useState<string>("");
   const navigate = useNavigate();
+  const { t } = useTranslation("home");
 
   const handleSearch = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && username.trim()) {
@@ -35,7 +37,7 @@ export default function Home() {
         className="w-full max-w-sm"
       >
         <Input
-          placeholder="Search"
+          placeholder={t("search")}
           className="sm:w-148 sm:h-12"
           css={{ "--focus-color": " var(--purple)" }}
           onKeyDown={(e) => handleSearch(e)}

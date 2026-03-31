@@ -1,0 +1,6 @@
+{
+  "error": "Erro",
+  "user_not_found": "Usuário não encontrado",
+  "fetch_repos_error": "Erro ao buscar repositórios",
+  "new_search": "Busque novamente"
+}
