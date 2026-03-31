@@ -2,6 +2,11 @@
 
 Este projeto é a resolução do desafio técnico proposto pela Petize para a vaga de Estágio Desenvolvedor React. O objetivo principal foi construir uma aplicação React que permite buscar perfis de desenvolvedores no GitHub, exibir seus repositórios e gerenciar a navegação.
 
+## Disponibilização do App
+
+Acessar app em produção (Deploy feito utilizando Vercel):
+<https://petize-desafio-bice.vercel.app/>
+
 ## Tecnologias Utilizadas
 
 O projeto foi desenvolvido utilizando as seguintes tecnologias:
@@ -13,6 +18,7 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias:
 - **Zod:** Biblioteca de validação de schemas, garantindo a integridade dos dados recebidos da API.
 - **React Router DOM:** Para gerenciamento de rotas e navegação entre as páginas.
 - **i18Next:** Framework de internacionalização para suporte a múltiplos idiomas (Português e Inglês).
+- **Vercel:** Deploy do projeto
 
 ## Funcionalidades Implementadas
 
