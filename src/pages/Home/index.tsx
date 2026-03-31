@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LuSearch } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
+import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 
 export default function Home() {
   const [username, setUsername] = useState<string>("");
@@ -32,6 +33,8 @@ export default function Home() {
           d_evs
         </Heading>
       </div>
+      <LanguageSwitcher />
+
       <InputGroup
         startElement={<LuSearch size={20} />}
         className="w-full max-w-sm"

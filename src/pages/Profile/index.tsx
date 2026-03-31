@@ -28,14 +28,18 @@ import {
 } from "react-icons/lu";
 import RepositoryCard from "../../components/Profile/RepositoryCard";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGithubUser } from "../../hooks/useGithubUser";
 import { getRelativeDate } from "../../utils/getRelativeDate";
 import { nullableToUndefined } from "../../helpers/nullableToUndefined";
 import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 
 export default function Profile() {
   const { username } = useParams();
+  const [newUsernameSearch, setNewUsernameSearch] = useState<string | null>(
+    null,
+  );
   const navigate = useNavigate();
   const { t } = useTranslation(["profile", "errors"]);
   const {
@@ -52,6 +56,12 @@ export default function Profile() {
     setDirection,
   } = useGithubUser();
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleSearch = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && newUsernameSearch?.trim()) {
+      navigate(`/profile/${newUsernameSearch}`);
+    }
+  };
   const sortCollection = createListCollection({
     items: [
       { label: t("profile:sort.updated"), value: "updated" },
@@ -117,7 +127,7 @@ export default function Profile() {
       {/* Desktop-only header */}
       <header className="hidden sm:block w-full py-5!">
         <div className="flex gap-30 w-full items-start ">
-          <div className="flex gap-5">
+          <Link href="/" className="flex gap-5">
             <Heading
               className="text-4xl!"
               fontWeight="normal"
@@ -132,7 +142,7 @@ export default function Profile() {
             >
               d_evs
             </Heading>
-          </div>
+          </Link>
           <InputGroup
             startElement={<LuSearch size={20} />}
             className="w-full max-w-3xl"
@@ -141,8 +151,11 @@ export default function Profile() {
               placeholder={t("profile:search_placeholder")}
               className="sm:w-148 sm:h-12"
               css={{ "--focus-color": " var(--purple)" }}
+              onKeyDown={(e) => handleSearch(e)}
+              onChange={(e) => setNewUsernameSearch(e.target.value)}
             />
           </InputGroup>
+          <LanguageSwitcher />
         </div>
       </header>
 
@@ -206,14 +219,21 @@ export default function Profile() {
           {user?.blog && (
             <div className="flex gap-3 items-center">
               <LuLink size={16} />
-              <Span>{user.blog}</Span>
+              <Link href={user.blog} target="_blank">
+                {user.blog}
+              </Link>
             </div>
           )}
 
           {user?.twitter_username && (
             <div className="flex gap-3 items-center">
               <LuTwitter size={16} />
-              <Span>@{user.twitter_username}</Span>
+              <Link
+                href={`https://x.com/${user.twitter_username}`}
+                target="_blank"
+              >
+                @{user.twitter_username}
+              </Link>
             </div>
           )}
         </div>
@@ -279,14 +299,19 @@ export default function Profile() {
               {user?.blog && (
                 <div className="flex gap-3 items-center">
                   <LuLink size={16} />
-                  <Link href={user.blog}>{user.blog}</Link>
+                  <Link href={user.blog} target="_blank">
+                    {user.blog}
+                  </Link>
                 </div>
               )}
 
               {user?.twitter_username && (
                 <div className="flex gap-3 items-center">
                   <LuTwitter size={16} />
-                  <Link href={`https://x.com/${user.twitter_username}`}>
+                  <Link
+                    href={`https://x.com/${user.twitter_username}`}
+                    target="_blank"
+                  >
                     @{user.twitter_username}
                   </Link>
                 </div>
