@@ -40,7 +40,7 @@ export default function Home() {
       <div className="w-full flex items-center justify-center gap-5">
         <InputGroup
           startElement={<LuSearch size={20} />}
-          w={{ base: "90%", lg: "592px" }}
+          w={{ base: "90%", md: "90%", lg: "592px" }}
         >
           <Input
             placeholder={t("search")}
@@ -54,6 +54,7 @@ export default function Home() {
           fontWeight="bold"
           w="176px"
           onClick={() => handleSearch()}
+          display={{ base: "none", lg: "flex" }}
         >
           {t("search")}
         </Button>
