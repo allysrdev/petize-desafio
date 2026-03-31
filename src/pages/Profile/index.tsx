@@ -118,15 +118,21 @@ export default function Profile() {
       <div className="w-full h-screen flex items-center justify-center flex-col gap-5">
         <Heading>{t("errors:error")}</Heading>
         <Span>{t(`errors:${error}`)}</Span>
-        <Button onClick={() => navigate("/")}>{t("errors:new_search")}</Button>
+        <Button
+          onClick={() => navigate("/")}
+          backgroundColor="var(--purple)"
+          fontWeight="bold"
+        >
+          {t("errors:new_search")}
+        </Button>
       </div>
     );
   }
   return (
     <div className="w-full h-full flex flex-col gap-5!">
       {/* Desktop-only header */}
-      <header className="hidden sm:block w-full py-5!">
-        <div className="flex gap-30 w-full items-start ">
+      <header className="hidden lg:block w-full py-5! px-5!">
+        <div className="flex gap-30 w-full items-center justify-center">
           <Link href="/" className="flex gap-5">
             <Heading
               className="text-4xl!"
@@ -161,7 +167,7 @@ export default function Profile() {
 
       {/* Mobile Profile Header */}
       <Box
-        className="flex flex-col gap-5 p-5! text-zinc-600 sm:hidden"
+        className="flex flex-col gap-5 p-5! text-zinc-600 lg:hidden"
         bg="var(--profile-backgrund-mobile)"
       >
         {/* Avatar & user Info */}
@@ -240,7 +246,7 @@ export default function Profile() {
       </Box>
 
       <div className="w-full flex items-start justify-start">
-        <aside className="hidden sm:flex w-[30%]">
+        <aside className="hidden lg:flex w-[30%]">
           {/* Desktop Profile Header */}
           <Box className="flex flex-col gap-5 p-5! text-zinc-600">
             {/* Avatar & user Info */}
@@ -322,6 +328,7 @@ export default function Profile() {
               className="mt-8!"
               backgroundColor="var(--purple)"
               fontWeight="bold"
+              w="280px"
             >
               {t("profile:contact")}
             </Button>
