@@ -213,13 +213,13 @@ export default function Profile() {
           {user?.email && (
             <div className="flex gap-3 items-center">
               <LuMail size={16} />
-              <Span>{user.email}</Span>
+              <Link href={`mailto:${user.email}`}>{user.email}</Link>
             </div>
           )}
           {user?.blog && (
             <div className="flex gap-3 items-center">
               <LuLink size={16} />
-              <Link href={user.blog} target="_blank">
+              <Link href={`https://${user.blog}`} target="_blank">
                 {user.blog}
               </Link>
             </div>
@@ -293,13 +293,13 @@ export default function Profile() {
               {user?.email && (
                 <div className="flex gap-3 items-center">
                   <LuMail size={16} />
-                  <Span>{user.email}</Span>
+                  <Link href={`mailto:${user.email}`}>{user.email}</Link>
                 </div>
               )}
               {user?.blog && (
                 <div className="flex gap-3 items-center">
                   <LuLink size={16} />
-                  <Link href={user.blog} target="_blank">
+                  <Link href={`https://${user.blog}`} target="_blank">
                     {user.blog}
                   </Link>
                 </div>
