@@ -26,7 +26,7 @@
     "desc": "Descendente"
   },
 
-  "loading_user": "Buscando usuário...",
+  "loading_user": "Carregando...",
   "loading_more": "Carregando mais...",
 
   "updated_days_one": "há {{count}} dia",

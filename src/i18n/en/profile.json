@@ -26,7 +26,7 @@
     "desc": "Descending"
   },
 
-  "loading_user": "Loading user...",
+  "loading_user": "Loading...",
   "loading_more": "Loading more...",
 
   "updated_days_one": "{{count}} day ago",
