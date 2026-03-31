@@ -34,6 +34,7 @@ import { getRelativeDate } from "../../utils/getRelativeDate";
 import { nullableToUndefined } from "../../helpers/nullableToUndefined";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher";
+import { normalizeUrl } from "../../utils/normalizeUrl";
 
 export default function Profile() {
   const { username } = useParams();
@@ -225,7 +226,7 @@ export default function Profile() {
           {user?.blog && (
             <div className="flex gap-3 items-center">
               <LuLink size={16} />
-              <Link href={`https://${user.blog}`} target="_blank">
+              <Link href={normalizeUrl(user.blog)} target="_blank">
                 {user.blog}
               </Link>
             </div>
@@ -305,7 +306,7 @@ export default function Profile() {
               {user?.blog && (
                 <div className="flex gap-3 items-center">
                   <LuLink size={16} />
-                  <Link href={`https://${user.blog}`} target="_blank">
+                  <Link href={normalizeUrl(user.blog)} target="_blank">
                     {user.blog}
                   </Link>
                 </div>
