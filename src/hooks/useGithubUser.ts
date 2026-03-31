@@ -1,9 +1,14 @@
 import { useCallback, useState } from "react";
 import type { GithubRepo, GithubUser } from "../schemas/github.schema";
 import { getUser, getUserRepos } from "../services/githubService";
+import {
+  getPrimaryContact,
+  type ContactLink,
+} from "../utils/getPrimaryContact";
 
 export function useGithubUser() {
   const [user, setUser] = useState<GithubUser | null>(null);
+  const [contacts, setContacts] = useState<ContactLink[]>();
   const [repos, setRepos] = useState<GithubRepo[]>([]);
   const [page, setPage] = useState(1);
   const [loadingUser, setLoadingUser] = useState(false);
@@ -25,12 +30,20 @@ export function useGithubUser() {
         const reposData = await getUserRepos(username, 1, sort, direction);
 
         setUser(userData);
+        setContacts(
+          getPrimaryContact(
+            userData.email,
+            userData.blog,
+            userData.twitter_username,
+          ),
+        );
         setRepos(reposData);
         setHasMore(reposData.length === 10);
       } catch (err) {
         setError((err as Error).message);
         setUser(null);
         setRepos([]);
+        setContacts([]);
       } finally {
         setLoadingUser(false);
         setLoadingMore(false);
@@ -79,5 +92,6 @@ export function useGithubUser() {
     direction,
     setSort,
     setDirection,
+    contacts,
   };
 }

@@ -55,6 +55,7 @@ export default function Profile() {
     direction,
     setSort,
     setDirection,
+    contacts,
   } = useGithubUser();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -325,14 +326,27 @@ export default function Profile() {
               )}
             </div>
 
-            <Button
-              className="mt-8!"
-              backgroundColor="var(--purple)"
-              fontWeight="bold"
-              w="280px"
-            >
-              {t("profile:contact")}
-            </Button>
+            {contacts ? (
+              contacts.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.href.startsWith("mailto") ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  style={{ width: "280px" }}
+                >
+                  <Button
+                    backgroundColor="var(--purple)"
+                    fontWeight="bold"
+                    w="full"
+                  >
+                    {t(`profile:${link.label}`)}
+                  </Button>
+                </a>
+              ))
+            ) : (
+              <></>
+            )}
           </Box>
         </aside>
 

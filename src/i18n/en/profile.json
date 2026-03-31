@@ -5,7 +5,9 @@
   "followers": "followers",
   "following": "following",
 
-  "contact": "Contact",
+  "contact": "Send e-mail",
+  "visit_site": "Visit website",
+  "twitter": "View Twitter",
 
   "no_description": "No description",
 
