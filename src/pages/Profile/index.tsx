@@ -162,7 +162,9 @@ export default function Profile() {
             src={user?.avatar_url}
           />
           <div className="flex flex-col items-start">
-            <Heading color="black">{user?.name}</Heading>
+            <Heading size="md" color="black">
+              {user?.name}
+            </Heading>
             <span className="font-light">@{user?.login}</span>
           </div>
         </div>
