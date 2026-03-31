@@ -104,6 +104,7 @@ export default function Profile() {
           onClick={() => navigate("/")}
           backgroundColor="var(--purple)"
           fontWeight="bold"
+          color="white"
         >
           {t("errors:new_search")}
         </Button>
@@ -115,7 +116,7 @@ export default function Profile() {
       {/* Desktop-only header */}
       <header className="hidden lg:block w-full py-5! px-5!">
         <div className="flex gap-30 w-full items-center justify-between">
-          <Link href="/" className="flex gap-5">
+          <a href="/" className="flex gap-5">
             <Heading
               className="text-4xl!"
               fontWeight="normal"
@@ -130,7 +131,7 @@ export default function Profile() {
             >
               d_evs
             </Heading>
-          </Link>
+          </a>
           <InputGroup className="w-full max-w-3xl">
             <InputLeftElement pointerEvents="none">
               <LuSearch size={20} />
