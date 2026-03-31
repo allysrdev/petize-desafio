@@ -1,4 +1,4 @@
-import { Heading, Input, InputGroup } from "@chakra-ui/react";
+import { Button, Heading, Input, InputGroup } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LuSearch } from "react-icons/lu";
@@ -10,14 +10,16 @@ export default function Home() {
   const navigate = useNavigate();
   const { t } = useTranslation("home");
 
-  const handleSearch = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && username.trim()) {
+  const handleSearch = (e?: React.KeyboardEvent) => {
+    if (e?.key === "Enter" && username.trim()) {
+      navigate(`/profile/${username}`);
+    } else if (!e && username.trim()) {
       navigate(`/profile/${username}`);
     }
   };
   return (
     <div className="w-full h-screen flex items-center justify-center flex-col gap-10 p-10">
-      <div className="flex gap-5">
+      <div className="flex gap-5 w-full items-center justify-center">
         <Heading
           className="text-5xl! sm:text-7xl!"
           fontWeight="normal"
@@ -35,18 +37,27 @@ export default function Home() {
       </div>
       <LanguageSwitcher />
 
-      <InputGroup
-        startElement={<LuSearch size={20} />}
-        className="w-full max-w-sm"
-      >
-        <Input
-          placeholder={t("search")}
-          className="sm:w-148 sm:h-12"
-          css={{ "--focus-color": " var(--purple)" }}
-          onKeyDown={(e) => handleSearch(e)}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </InputGroup>
+      <div className="w-full flex items-center justify-center gap-5">
+        <InputGroup
+          startElement={<LuSearch size={20} />}
+          w={{ base: "90%", lg: "592px" }}
+        >
+          <Input
+            placeholder={t("search")}
+            css={{ "--focus-color": "var(--purple)" }}
+            onKeyDown={(e) => handleSearch(e)}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </InputGroup>
+        <Button
+          backgroundColor="var(--purple)"
+          fontWeight="bold"
+          w="176px"
+          onClick={() => handleSearch()}
+        >
+          {t("search")}
+        </Button>
+      </div>
     </div>
   );
 }
