@@ -17,12 +17,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import {
+  LuArrowUpDown,
   LuBuilding2,
   LuHeart,
   LuLink,
   LuMail,
   LuMapPin,
   LuSearch,
+  LuTimer,
   LuTwitter,
   LuUsers,
 } from "react-icons/lu";
@@ -134,7 +136,7 @@ export default function Profile() {
     <div className="w-full h-full flex flex-col gap-5!">
       {/* Desktop-only header */}
       <header className="hidden lg:block w-full py-5! px-5!">
-        <div className="flex gap-30 w-full items-center justify-center">
+        <div className="flex gap-30 w-full items-center justify-between">
           <Link href="/" className="flex gap-5">
             <Heading
               className="text-4xl!"
@@ -248,7 +250,7 @@ export default function Profile() {
       </Box>
 
       <div className="w-full flex items-start justify-start">
-        <aside className="hidden lg:flex w-[30%]">
+        <aside className="hidden lg:flex max-w-[20%]">
           {/* Desktop Profile Header */}
           <Box className="flex flex-col gap-5 p-5! text-zinc-600">
             {/* Avatar & user Info */}
@@ -284,7 +286,7 @@ export default function Profile() {
             </div>
 
             {/* More user info */}
-            <div className="flex flex-col gap-2 w-[70%]">
+            <div className="flex flex-col gap-2">
               {user?.company && (
                 <div className="flex gap-3 items-center">
                   <LuBuilding2 size={16} />
@@ -355,7 +357,7 @@ export default function Profile() {
           ref={containerRef}
           className="flex flex-col overflow-auto h-200 w-full"
         >
-          <div className="flex gap-3 items-center justify-center">
+          <div className="flex gap-3 items-center justify-center sm:justify-start">
             {/* SORT */}
             <SelectRoot
               collection={sortCollection}
@@ -364,7 +366,10 @@ export default function Profile() {
               width="200px"
             >
               <SelectTrigger className="border border-zinc-300 rounded-md shadow-sm hover:border-zinc-400">
-                <SelectValueText placeholder={t("profile:sort_by")} />
+                <div className="flex items-center gap-2 w-full">
+                  <LuTimer className="text-zinc-500" />
+                  <SelectValueText placeholder={t("profile:sort_by")} />
+                </div>
               </SelectTrigger>
 
               <SelectContent position="fixed">
@@ -384,7 +389,10 @@ export default function Profile() {
               width="140px"
             >
               <SelectTrigger className="border border-zinc-300 rounded-md shadow-sm hover:border-zinc-400">
-                <SelectValueText placeholder={t("profile:direction")} />
+                <div className="flex items-center gap-2 w-full">
+                  <LuArrowUpDown />
+                  <SelectValueText placeholder={t("profile:direction")} />
+                </div>
               </SelectTrigger>
 
               <SelectContent position="fixed">
