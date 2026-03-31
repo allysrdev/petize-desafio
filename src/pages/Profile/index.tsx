@@ -341,7 +341,7 @@ export default function Profile() {
           ref={containerRef}
           className="flex flex-col overflow-auto h-200 w-full"
         >
-          <div className="flex gap-3 items-center justify-center sm:justify-start">
+          <div className="flex gap-3 items-center justify-center sm:justify-start px-5">
             {/* SORT */}
             <Select
               value={sort}
