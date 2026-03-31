@@ -1,4 +1,10 @@
-import { Button, Heading, Input, InputGroup } from "@chakra-ui/react";
+import {
+  Button,
+  Heading,
+  Input,
+  InputGroup,
+  InputLeftElement,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LuSearch } from "react-icons/lu";
@@ -38,10 +44,10 @@ export default function Home() {
       <LanguageSwitcher />
 
       <div className="w-full flex items-center justify-center gap-5">
-        <InputGroup
-          startElement={<LuSearch size={20} />}
-          w={{ base: "90%", md: "90%", lg: "592px" }}
-        >
+        <InputGroup w={{ base: "90%", md: "90%", lg: "592px" }}>
+          <InputLeftElement pointerEvents="none">
+            <LuSearch size={20} />
+          </InputLeftElement>
           <Input
             placeholder={t("search")}
             css={{ "--focus-color": "var(--purple)" }}
@@ -52,6 +58,7 @@ export default function Home() {
         <Button
           backgroundColor="var(--purple)"
           fontWeight="bold"
+          color="white"
           w="176px"
           onClick={() => handleSearch()}
           display={{ base: "none", lg: "flex" }}

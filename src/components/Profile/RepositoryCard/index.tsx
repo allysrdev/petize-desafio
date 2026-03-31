@@ -1,4 +1,4 @@
-import { Link, Span } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/react";
 import { LuStar } from "react-icons/lu";
 
 interface IRepositoryCardProps {
@@ -26,14 +26,14 @@ export default function RepositoryCard({
       >
         {name}
       </Link>
-      <Span className="text-zinc-600">{description}</Span>
+      <span className="text-zinc-600">{description}</span>
       <div className="flex gap-5 items-center border-b! border-b-zinc-600 pb-5! w-full">
         <div className="flex gap-3">
           <LuStar size={24} />
-          <Span>{stars}</Span>
+          <span>{stars}</span>
         </div>
         <div className="w-1 h-1 bg-zinc-600 rounded-full" />
-        <Span className="text-zinc-600 ">{updated_at}</Span>
+        <span className="text-zinc-600 ">{updated_at}</span>
       </div>
     </div>
   );

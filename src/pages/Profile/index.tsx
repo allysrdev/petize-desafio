@@ -2,29 +2,22 @@ import {
   Avatar,
   Box,
   Button,
-  createListCollection,
   Heading,
   Input,
   InputGroup,
+  InputLeftElement,
   Link,
-  SelectContent,
-  SelectItem,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
-  Span,
+  Select,
   Spinner,
   VStack,
 } from "@chakra-ui/react";
 import {
-  LuArrowUpDown,
   LuBuilding2,
   LuHeart,
   LuLink,
   LuMail,
   LuMapPin,
   LuSearch,
-  LuTimer,
   LuTwitter,
   LuUsers,
 } from "react-icons/lu";
@@ -66,21 +59,6 @@ export default function Profile() {
       navigate(`/profile/${newUsernameSearch}`);
     }
   };
-  const sortCollection = createListCollection({
-    items: [
-      { label: t("profile:sort.updated"), value: "updated" },
-      { label: t("profile:sort.created"), value: "created" },
-      { label: t("profile:sort.pushed"), value: "pushed" },
-      { label: t("profile:sort.full_name"), value: "full_name" },
-    ],
-  });
-
-  const directionCollection = createListCollection({
-    items: [
-      { label: t("profile:direction_options.desc"), value: "desc" },
-      { label: t("profile:direction_options.asc"), value: "asc" },
-    ],
-  });
 
   useEffect(() => {
     const el = containerRef.current;
@@ -111,7 +89,7 @@ export default function Profile() {
       <div className="h-screen flex items-center justify-center">
         <VStack gap={4}>
           <Spinner size="xl" color="var(--purple)" />
-          <Span fontSize="lg">{t("profile:loading_user")}</Span>
+          <span className="text-lg">{t("profile:loading_user")}</span>
         </VStack>
       </div>
     );
@@ -121,7 +99,7 @@ export default function Profile() {
     return (
       <div className="w-full h-screen flex items-center justify-center flex-col gap-5">
         <Heading>{t("errors:error")}</Heading>
-        <Span>{t(`errors:${error}`)}</Span>
+        <span>{t(`errors:${error}`)}</span>
         <Button
           onClick={() => navigate("/")}
           backgroundColor="var(--purple)"
@@ -153,10 +131,10 @@ export default function Profile() {
               d_evs
             </Heading>
           </Link>
-          <InputGroup
-            startElement={<LuSearch size={20} />}
-            className="w-full max-w-3xl"
-          >
+          <InputGroup className="w-full max-w-3xl">
+            <InputLeftElement pointerEvents="none">
+              <LuSearch size={20} />
+            </InputLeftElement>
             <Input
               placeholder={t("profile:search_placeholder")}
               className="sm:w-148 sm:h-12"
@@ -177,47 +155,48 @@ export default function Profile() {
         {/* Avatar & user Info */}
 
         <div className="flex gap-3 items-center">
-          <Avatar.Root size="lg">
-            <Avatar.Fallback name={nullableToUndefined(user?.name)} />
-            <Avatar.Image src={user?.avatar_url} />
-          </Avatar.Root>
+          <Avatar
+            size="lg"
+            name={nullableToUndefined(user?.name)}
+            src={user?.avatar_url}
+          />
           <div className="flex flex-col items-start">
             <Heading color="black">{user?.name}</Heading>
-            <Span fontWeight="light">@{user?.login}</Span>
+            <span className="font-light">@{user?.login}</span>
           </div>
         </div>
         {/* Followers / Following */}
         <div className="flex gap-5 ">
           <div className="flex items-center gap-2">
             <LuUsers />
-            <Span>
+            <span>
               {user?.followers} {t("profile:followers")}
-            </Span>
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <LuHeart />
-            <Span>
+            <span>
               {user?.following} {t("profile:following")}
-            </Span>
+            </span>
           </div>
         </div>
         {/* User Description */}
         <div className="w-full text-left">
-          <Span>{user?.bio}</Span>
+          <span>{user?.bio}</span>
         </div>
         {/* More user info */}
         <div className="flex flex-wrap gap-5 justify-center text-[13px]!">
           {user?.company && (
             <div className="flex gap-3 items-center">
               <LuBuilding2 size={16} />
-              <Span>{user?.company}</Span>
+              <span>{user?.company}</span>
             </div>
           )}
 
           {user?.location && (
             <div className="flex gap-3 items-center">
               <LuMapPin size={16} />
-              <Span>{user.location}</Span>
+              <span>{user.location}</span>
             </div>
           )}
           {user?.email && (
@@ -256,32 +235,35 @@ export default function Profile() {
             {/* Avatar & user Info */}
 
             <div className="flex gap-3 items-center">
-              <Avatar.Root size="lg">
-                <Avatar.Fallback name={nullableToUndefined(user?.name)} />
-                <Avatar.Image src={user?.avatar_url} />
-              </Avatar.Root>
+              <Avatar
+                size="lg"
+                name={nullableToUndefined(user?.name)}
+                src={user?.avatar_url}
+              />
               <div className="flex flex-col items-start">
-                <Heading color="black">{user?.name}</Heading>
-                <Span fontWeight="light">@{user?.login}</Span>
+                <Heading color="black" size="md">
+                  {user?.name}
+                </Heading>
+                <span className="font-light">@{user?.login}</span>
               </div>
             </div>
             {/* User Description */}
             <div className="w-full text-left">
-              <Span>{user?.bio}</Span>
+              <span>{user?.bio}</span>
             </div>
             {/* Followers / Following */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <LuUsers />
-                <Span>
+                <span>
                   {user?.followers} {t("profile:followers")}
-                </Span>
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <LuHeart />
-                <Span>
+                <span>
                   {user?.following} {t("profile:following")}
-                </Span>
+                </span>
               </div>
             </div>
 
@@ -290,14 +272,14 @@ export default function Profile() {
               {user?.company && (
                 <div className="flex gap-3 items-center">
                   <LuBuilding2 size={16} />
-                  <Span>{user?.company}</Span>
+                  <span>{user?.company}</span>
                 </div>
               )}
 
               {user?.location && (
                 <div className="flex gap-3 items-center">
                   <LuMapPin size={16} />
-                  <Span>{user.location}</Span>
+                  <span>{user.location}</span>
                 </div>
               )}
               {user?.email && (
@@ -341,6 +323,7 @@ export default function Profile() {
                     backgroundColor="var(--purple)"
                     fontWeight="bold"
                     w="full"
+                    color="white"
                   >
                     {t(`profile:${link.label}`)}
                   </Button>
@@ -359,50 +342,28 @@ export default function Profile() {
         >
           <div className="flex gap-3 items-center justify-center sm:justify-start">
             {/* SORT */}
-            <SelectRoot
-              collection={sortCollection}
-              value={[sort]}
-              onValueChange={(e) => setSort(e.value[0])}
+            <Select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
               width="200px"
             >
-              <SelectTrigger className="border border-zinc-300 rounded-md shadow-sm hover:border-zinc-400">
-                <div className="flex items-center gap-2 w-full">
-                  <LuTimer className="text-zinc-500" />
-                  <SelectValueText placeholder={t("profile:sort_by")} />
-                </div>
-              </SelectTrigger>
-
-              <SelectContent position="fixed">
-                {sortCollection.items.map((item) => (
-                  <SelectItem item={item} key={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </SelectRoot>
+              <option value="updated">{t("profile:sort.updated")}</option>
+              <option value="created">{t("profile:sort.created")}</option>
+              <option value="pushed">{t("profile:sort.pushed")}</option>
+              <option value="full_name">{t("profile:sort.full_name")}</option>
+            </Select>
 
             {/* DIRECTION */}
-            <SelectRoot
-              collection={directionCollection}
-              value={[direction]}
-              onValueChange={(e) => setDirection(e.value[0])}
-              width="140px"
+            <Select
+              value={direction}
+              onChange={(e) => setDirection(e.target.value)}
+              width="200px"
             >
-              <SelectTrigger className="border border-zinc-300 rounded-md shadow-sm hover:border-zinc-400">
-                <div className="flex items-center gap-2 w-full">
-                  <LuArrowUpDown />
-                  <SelectValueText placeholder={t("profile:direction")} />
-                </div>
-              </SelectTrigger>
-
-              <SelectContent position="fixed">
-                {directionCollection.items.map((item) => (
-                  <SelectItem item={item} key={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </SelectRoot>
+              <option value="desc">
+                {t("profile:direction_options.desc")}
+              </option>
+              <option value="asc">{t("profile:direction_options.asc")}</option>
+            </Select>
           </div>
           {repos.map((repo) => (
             <RepositoryCard
