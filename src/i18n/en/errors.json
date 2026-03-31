@@ -2,5 +2,5 @@
   "error": "Error",
   "user_not_found": "User not found",
   "fetch_repos_error": "Error fetching repositories",
-  "new_search": "Busque novamente"
+  "new_search": "New search"
 }
