@@ -2,5 +2,9 @@
   "error": "Erro",
   "user_not_found": "Usuário não encontrado",
   "fetch_repos_error": "Erro ao buscar repositórios",
+  "rate_limit_exceeded": "Limite de requisições excedido. Tente novamente mais tarde.",
+  "server_error": "O servidor do GitHub está instável. Tente novamente em instantes.",
+  "network_error": "Erro de conexão. Verifique sua internet.",
+  "fetch_user_error": "Não foi possível carregar os dados do usuário no momento.",
   "new_search": "Busque novamente"
 }
