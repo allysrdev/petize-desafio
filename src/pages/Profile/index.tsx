@@ -379,7 +379,14 @@ export default function Profile() {
             />
           ))}
 
-          {loadingMore && <p>{t("profile:loading_more")}</p>}
+          {loadingMore && (
+            <div className="h-screen flex items-center justify-center">
+              <VStack gap={4}>
+                <Spinner size="xl" color="var(--purple)" />
+                <span className="text-lg">{t("profile:loading_more")}</span>
+              </VStack>
+            </div>
+          )}
         </Box>
       </div>
     </div>
