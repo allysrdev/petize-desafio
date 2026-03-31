@@ -1,73 +1,62 @@
-# React + TypeScript + Vite
+# Desafio Técnico Petize - Search d_ev
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto é a resolução do desafio técnico proposto pela Petize para a vaga de Estágio Desenvolvedor React. O objetivo principal foi construir uma aplicação React que permite buscar perfis de desenvolvedores no GitHub, exibir seus repositórios e gerenciar a navegação.
 
-Currently, two official plugins are available:
+## Tecnologias Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+O projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-## React Compiler
+- **React 19:** Biblioteca JavaScript para construção de interfaces de usuário.
+- **TypeScript:** Superset do JavaScript que adiciona tipagem estática, melhorando a robustez do código.
+- **Chakra UI:** Biblioteca de componentes para React, utilizada para construir a interface de forma rápida e acessível.
+- **Tailwind CSS:** Framework CSS utilitário para estilização rápida e responsiva.
+- **Zod:** Biblioteca de validação de schemas, garantindo a integridade dos dados recebidos da API.
+- **React Router DOM:** Para gerenciamento de rotas e navegação entre as páginas.
+- **i18Next:** Framework de internacionalização para suporte a múltiplos idiomas (Português e Inglês).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Funcionalidades Implementadas
 
-## Expanding the ESLint configuration
+- **Busca de Usuários:** Permite pesquisar perfis do GitHub pelo username.
+- **Página de Perfil:** Exibe informações detalhadas do usuário e seus repositórios.
+- **Scroll Infinito:** Carregamento dinâmico de repositórios conforme o usuário rola a página.
+- **Ordenação de Repositórios:** Opções para ordenar os repositórios por diferentes critérios (atualização, criação, push, nome) e direção (ascendente/descendente).
+- **Responsividade:** Interface adaptável para dispositivos móveis e desktops.
+- **Internacionalização:** Suporte a Português e Inglês para os textos da aplicação e switcher de idioma.
+- **Tratamento de Erros:** Mensagens informativas para usuários não encontrados ou erros na API.
+- **Links Externos:** Nomes de repositórios, links de blog e Twitter são clicáveis e direcionam para as páginas correspondentes.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Como Rodar o Projeto
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1.  **Clone o repositório:**
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+    ```bash
+    git clone https://github.com/allysrdev/petize-desafio.git
+    cd petize-desafio
+    ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2.  **Instale as dependências:**
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+    ```bash
+    npm install
+    # ou yarn install
+    # ou pnpm install
+    ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3.  **Configure as variáveis de ambiente:**
+    Crie um arquivo `.env` na raiz do projeto com a seguinte variável:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+    ```
+    VITE_GITHUB_TOKEN=SEU_TOKEN_DO_GITHUB
+    ```
+
+    Pra gerar um token pessoal de acesso no GitHub: `Settings > Developer settings > Personal access tokens`.
+
+4.  **Inicie o servidor de desenvolvimento:**
+
+    ```bash
+    npm run dev
+    # ou yarn dev
+    # ou pnpm dev
+    ```
+
+    O aplicativo estará disponível em `http://localhost:5173`
