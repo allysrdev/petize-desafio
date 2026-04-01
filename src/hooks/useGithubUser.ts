@@ -5,18 +5,19 @@ import {
   getPrimaryContact,
   type ContactLink,
 } from "../utils/getPrimaryContact";
+import { type RepoDirection, type RepoSort } from "../types/repo";
 
 export function useGithubUser() {
   const [user, setUser] = useState<GithubUser | null>(null);
-  const [contacts, setContacts] = useState<ContactLink[]>();
+  const [contacts, setContacts] = useState<ContactLink[] | undefined>();
   const [repos, setRepos] = useState<GithubRepo[]>([]);
   const [page, setPage] = useState(1);
   const [loadingUser, setLoadingUser] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sort, setSort] = useState("updated");
-  const [direction, setDirection] = useState("desc");
+  const [sort, setSort] = useState<RepoSort>("updated");
+  const [direction, setDirection] = useState<RepoDirection>("desc");
 
   const fetchInitialData = useCallback(
     async (username: string) => {

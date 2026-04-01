@@ -1,72 +1,19 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Heading,
-  Link,
-  Select,
-  Spinner,
-  VStack,
-} from "@chakra-ui/react";
-import {
-  LuBuilding2,
-  LuHeart,
-  LuLink,
-  LuMail,
-  LuMapPin,
-  LuTwitter,
-  LuUsers,
-} from "react-icons/lu";
-import RepositoryCard from "../../components/Profile/RepositoryCard";
+import { Button, Heading, Spinner, VStack } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef } from "react";
 import { useGithubUser } from "../../hooks/useGithubUser";
-import { getRelativeDate } from "../../utils/getRelativeDate";
-import { nullableToUndefined } from "../../helpers/nullableToUndefined";
 import { useTranslation } from "react-i18next";
-import { LanguageSwitcher } from "../../components/shared/LanguageSwitcher";
-import { normalizeUrl } from "../../utils/normalizeUrl";
-import { SearchInput } from "../../components/shared/SearchInput";
-import { useSearch } from "../../hooks/useSearch";
+import ProfileHeader from "../../components/Profile/ProfileHeader";
+import RepositoriesList from "../../components/Profile/RepositorysList";
+import { useEffect } from "react";
+import ProfileInfoDesktop from "../../components/Profile/ProfileInfoDesktop";
+import ProfileInfoMobile from "../../components/Profile/ProfileInfoMobile";
 
 export default function Profile() {
-  const { username } = useParams();
   const navigate = useNavigate();
-  const { search } = useSearch();
   const { t } = useTranslation(["profile", "errors"]);
-  const {
-    user,
-    repos,
-    loadingUser,
-    loadingMore,
-    loadMoreRepos,
-    fetchInitialData,
-    error,
-    sort,
-    direction,
-    setSort,
-    setDirection,
-    contacts,
-  } = useGithubUser();
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = containerRef.current;
-
-    const handleScroll = () => {
-      if (!el) return;
-
-      const isBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
-
-      if (isBottom) {
-        loadMoreRepos(username!);
-      }
-    };
-
-    el?.addEventListener("scroll", handleScroll);
-
-    return () => el?.removeEventListener("scroll", handleScroll);
-  }, [loadMoreRepos, username]);
+  const { user, loadingUser, error, fetchInitialData, contacts, repos } =
+    useGithubUser();
+  const { username } = useParams();
 
   useEffect(() => {
     if (!username) return;
@@ -104,273 +51,17 @@ export default function Profile() {
   return (
     <div className="w-full h-full flex flex-col gap-5!">
       {/* Desktop-only header */}
-      <header className="hidden lg:block w-full py-5! px-5!">
-        <div className="flex gap-30 w-full items-center justify-between">
-          <a href="/" className="flex gap-5">
-            <Heading
-              className="text-4xl!"
-              fontWeight="normal"
-              color="var(--blue) "
-            >
-              Search
-            </Heading>
-            <Heading
-              className="text-4xl!"
-              fontWeight="normal"
-              color="var(--purple)"
-            >
-              d_evs
-            </Heading>
-          </a>
-
-          <SearchInput
-            onSearch={search}
-            placeholder={t("profile:search_placeholder")}
-          />
-          <LanguageSwitcher />
-        </div>
-      </header>
-
+      <ProfileHeader />
       {/* Mobile Profile Header */}
-      <Box
-        className="flex flex-col gap-5 p-5! text-zinc-600 lg:hidden"
-        bg="var(--profile-backgrund-mobile)"
-      >
-        {/* Avatar & user Info */}
-
-        <div className="flex gap-3 items-center">
-          <Avatar
-            size="lg"
-            name={nullableToUndefined(user?.name)}
-            src={user?.avatar_url}
-          />
-          <div className="flex flex-col items-start">
-            <Heading size="md" color="black">
-              {user?.name}
-            </Heading>
-            <span className="font-light">@{user?.login}</span>
-          </div>
-        </div>
-        {/* Followers / Following */}
-        <div className="flex gap-5 ">
-          <div className="flex items-center gap-2">
-            <LuUsers />
-            <span>
-              {user?.followers} {t("profile:followers")}
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <LuHeart />
-            <span>
-              {user?.following} {t("profile:following")}
-            </span>
-          </div>
-        </div>
-        {/* User Description */}
-        <div className="w-full text-left">
-          <span>{user?.bio}</span>
-        </div>
-        {/* More user info */}
-        <div className="flex flex-wrap gap-5 justify-center text-[13px]!">
-          {user?.company && (
-            <div className="flex gap-3 items-center">
-              <LuBuilding2 size={16} />
-              <span>{user?.company}</span>
-            </div>
-          )}
-
-          {user?.location && (
-            <div className="flex gap-3 items-center">
-              <LuMapPin size={16} />
-              <span>{user.location}</span>
-            </div>
-          )}
-          {user?.email && (
-            <div className="flex gap-3 items-center">
-              <LuMail size={16} />
-              <Link href={`mailto:${user.email}`}>{user.email}</Link>
-            </div>
-          )}
-          {user?.blog && (
-            <div className="flex gap-3 items-center">
-              <LuLink size={16} />
-              <Link href={normalizeUrl(user.blog)} target="_blank">
-                {user.blog}
-              </Link>
-            </div>
-          )}
-
-          {user?.twitter_username && (
-            <div className="flex gap-3 items-center">
-              <LuTwitter size={16} />
-              <Link
-                href={`https://x.com/${user.twitter_username}`}
-                target="_blank"
-              >
-                @{user.twitter_username}
-              </Link>
-            </div>
-          )}
-        </div>
-      </Box>
+      <ProfileInfoMobile user={user} />
 
       <div className="w-full flex items-start justify-start">
         <aside className="hidden lg:flex max-w-[20%]">
           {/* Desktop Profile Header */}
-          <Box className="flex flex-col gap-5 p-5! text-zinc-600">
-            {/* Avatar & user Info */}
-
-            <div className="flex gap-3 items-center">
-              <Avatar
-                size="lg"
-                name={nullableToUndefined(user?.name)}
-                src={user?.avatar_url}
-              />
-              <div className="flex flex-col items-start">
-                <Heading color="black" size="md">
-                  {user?.name}
-                </Heading>
-                <span className="font-light">@{user?.login}</span>
-              </div>
-            </div>
-            {/* User Description */}
-            <div className="w-full text-left">
-              <span>{user?.bio}</span>
-            </div>
-            {/* Followers / Following */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <LuUsers />
-                <span>
-                  {user?.followers} {t("profile:followers")}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <LuHeart />
-                <span>
-                  {user?.following} {t("profile:following")}
-                </span>
-              </div>
-            </div>
-
-            {/* More user info */}
-            <div className="flex flex-col gap-2">
-              {user?.company && (
-                <div className="flex gap-3 items-center">
-                  <LuBuilding2 size={16} />
-                  <span>{user?.company}</span>
-                </div>
-              )}
-
-              {user?.location && (
-                <div className="flex gap-3 items-center">
-                  <LuMapPin size={16} />
-                  <span>{user.location}</span>
-                </div>
-              )}
-              {user?.email && (
-                <div className="flex gap-3 items-center">
-                  <LuMail size={16} />
-                  <Link href={`mailto:${user.email}`}>{user.email}</Link>
-                </div>
-              )}
-              {user?.blog && (
-                <div className="flex gap-3 items-center">
-                  <LuLink size={16} />
-                  <Link href={normalizeUrl(user.blog)} target="_blank">
-                    {user.blog}
-                  </Link>
-                </div>
-              )}
-
-              {user?.twitter_username && (
-                <div className="flex gap-3 items-center">
-                  <LuTwitter size={16} />
-                  <Link
-                    href={`https://x.com/${user.twitter_username}`}
-                    target="_blank"
-                  >
-                    @{user.twitter_username}
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {contacts ? (
-              contacts.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target={link.href.startsWith("mailto") ? undefined : "_blank"}
-                  rel="noopener noreferrer"
-                  style={{ width: "280px" }}
-                >
-                  <Button
-                    backgroundColor="var(--purple)"
-                    fontWeight="bold"
-                    w="full"
-                    color="white"
-                  >
-                    {t(`profile:${link.label}`)}
-                  </Button>
-                </a>
-              ))
-            ) : (
-              <></>
-            )}
-          </Box>
+          <ProfileInfoDesktop user={user} contacts={contacts} />
         </aside>
-
         {/* Repositories */}
-        <Box
-          ref={containerRef}
-          className="flex flex-col overflow-auto h-200 w-full"
-        >
-          <div className="flex gap-3 items-center justify-center sm:justify-start px-5">
-            {/* SORT */}
-            <Select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              width="200px"
-            >
-              <option value="updated">{t("profile:sort.updated")}</option>
-              <option value="created">{t("profile:sort.created")}</option>
-              <option value="pushed">{t("profile:sort.pushed")}</option>
-              <option value="full_name">{t("profile:sort.full_name")}</option>
-            </Select>
-
-            {/* DIRECTION */}
-            <Select
-              value={direction}
-              onChange={(e) => setDirection(e.target.value)}
-              width="200px"
-            >
-              <option value="desc">
-                {t("profile:direction_options.desc")}
-              </option>
-              <option value="asc">{t("profile:direction_options.asc")}</option>
-            </Select>
-          </div>
-          {repos.map((repo) => (
-            <RepositoryCard
-              key={repo.id}
-              name={repo.name}
-              description={repo.description ?? t("profile:no_description")}
-              stars={repo.stargazers_count}
-              updated_at={getRelativeDate(repo.updated_at, t)}
-              url={repo.html_url}
-            />
-          ))}
-
-          {loadingMore && (
-            <div className="h-screen flex items-center justify-center">
-              <VStack gap={4}>
-                <Spinner size="xl" color="var(--purple)" />
-                <span className="text-lg">{t("profile:loading_more")}</span>
-              </VStack>
-            </div>
-          )}
-        </Box>
+        <RepositoriesList repos={repos} />
       </div>
     </div>
   );
