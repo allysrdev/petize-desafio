@@ -24,6 +24,8 @@ export default function RepositoryFilters({
       >
         <option value="updated">{t("profile:sort.updated")}</option>
         <option value="created">{t("profile:sort.created")}</option>
+        <option value="pushed">{t("profile:sort.pushed")}</option>
+        <option value="full_name">{t("profile:sort.full_name")}</option>
       </Select>
 
       <Select
