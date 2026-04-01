@@ -9,6 +9,7 @@ import { type RepoDirection, type RepoSort } from "../types/repo";
 
 export function useGithubUser() {
   const [user, setUser] = useState<GithubUser | null>(null);
+  const [username, setUsername] = useState<string>("");
   const [contacts, setContacts] = useState<ContactLink[] | undefined>();
   const [repos, setRepos] = useState<GithubRepo[]>([]);
   const [page, setPage] = useState(1);
@@ -21,11 +22,14 @@ export function useGithubUser() {
 
   const fetchInitialData = useCallback(
     async (username: string) => {
+      setUsername(username);
       try {
         setLoadingUser(true);
         setLoadingMore(true);
         setError(null);
         setPage(1);
+        setRepos([]);
+        setHasMore(true);
 
         const userData = await getUser(username);
         const reposData = await getUserRepos(username, 1, sort, direction);
@@ -39,7 +43,7 @@ export function useGithubUser() {
           ),
         );
         setRepos(reposData);
-        setHasMore(reposData.length === 10);
+        setHasMore(reposData.length > 0);
       } catch (err) {
         setError((err as Error).message);
         setUser(null);
@@ -53,32 +57,24 @@ export function useGithubUser() {
     [sort, direction],
   );
 
-  const loadMoreRepos = useCallback(
-    async (username: string) => {
-      if (loadingMore || !hasMore) return;
+  const loadMoreRepos = useCallback(async () => {
+    if (loadingMore || !hasMore) return;
 
-      try {
-        setLoadingMore(true);
-        const nextPage = page + 1;
+    try {
+      setLoadingMore(true);
+      const nextPage = page + 1;
 
-        const newRepos = await getUserRepos(
-          username,
-          nextPage,
-          sort,
-          direction,
-        );
+      const newRepos = await getUserRepos(username, nextPage, sort, direction);
 
-        setRepos((prev) => [...prev, ...newRepos]);
-        setPage(nextPage);
-        setHasMore(newRepos.length === 10);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoadingMore(false);
-      }
-    },
-    [page, loadingMore, hasMore, sort, direction],
-  );
+      setRepos((prev) => [...prev, ...newRepos]);
+      setPage(nextPage);
+      setHasMore(newRepos.length === 10);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [page, loadingMore, hasMore, sort, direction, username]);
 
   return {
     user,

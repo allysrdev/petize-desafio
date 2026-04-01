@@ -12,8 +12,21 @@ import { ErrorState } from "../../components/shared/ErrorState";
 export default function Profile() {
   const navigate = useNavigate();
   const { t } = useTranslation(["profile", "errors"]);
-  const { user, loadingUser, error, fetchInitialData, contacts, repos } =
-    useGithubUser();
+  const {
+    user,
+    loadingUser,
+    error,
+    fetchInitialData,
+    contacts,
+    repos,
+    direction,
+    hasMore,
+    loadMoreRepos,
+    loadingMore,
+    setDirection,
+    setSort,
+    sort,
+  } = useGithubUser();
   const { username } = useParams();
 
   useEffect(() => {
@@ -49,7 +62,16 @@ export default function Profile() {
           <ProfileInfoDesktop user={user} contacts={contacts} />
         </aside>
         {/* Repositories */}
-        <RepositoriesList repos={repos} />
+        <RepositoriesList
+          repos={repos}
+          direction={direction}
+          hasMore={hasMore}
+          loadMoreRepos={loadMoreRepos}
+          loadingMore={loadingMore}
+          setDirection={setDirection}
+          setSort={setSort}
+          sort={sort}
+        />
       </div>
     </div>
   );
