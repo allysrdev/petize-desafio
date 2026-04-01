@@ -3,9 +3,6 @@ import {
   Box,
   Button,
   Heading,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Link,
   Select,
   Spinner,
@@ -17,26 +14,25 @@ import {
   LuLink,
   LuMail,
   LuMapPin,
-  LuSearch,
   LuTwitter,
   LuUsers,
 } from "react-icons/lu";
 import RepositoryCard from "../../components/Profile/RepositoryCard";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useGithubUser } from "../../hooks/useGithubUser";
 import { getRelativeDate } from "../../utils/getRelativeDate";
 import { nullableToUndefined } from "../../helpers/nullableToUndefined";
 import { useTranslation } from "react-i18next";
-import { LanguageSwitcher } from "../../components/LanguageSwitcher";
+import { LanguageSwitcher } from "../../components/shared/LanguageSwitcher";
 import { normalizeUrl } from "../../utils/normalizeUrl";
+import { SearchInput } from "../../components/shared/SearchInput";
+import { useSearch } from "../../hooks/useSearch";
 
 export default function Profile() {
   const { username } = useParams();
-  const [newUsernameSearch, setNewUsernameSearch] = useState<string | null>(
-    null,
-  );
   const navigate = useNavigate();
+  const { search } = useSearch();
   const { t } = useTranslation(["profile", "errors"]);
   const {
     user,
@@ -53,12 +49,6 @@ export default function Profile() {
     contacts,
   } = useGithubUser();
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleSearch = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && newUsernameSearch?.trim()) {
-      navigate(`/profile/${newUsernameSearch}`);
-    }
-  };
 
   useEffect(() => {
     const el = containerRef.current;
@@ -132,18 +122,11 @@ export default function Profile() {
               d_evs
             </Heading>
           </a>
-          <InputGroup className="w-full max-w-3xl">
-            <InputLeftElement pointerEvents="none">
-              <LuSearch size={20} />
-            </InputLeftElement>
-            <Input
-              placeholder={t("profile:search_placeholder")}
-              className="sm:w-148 sm:h-12"
-              css={{ "--focus-color": " var(--purple)" }}
-              onKeyDown={(e) => handleSearch(e)}
-              onChange={(e) => setNewUsernameSearch(e.target.value)}
-            />
-          </InputGroup>
+
+          <SearchInput
+            onSearch={search}
+            placeholder={t("profile:search_placeholder")}
+          />
           <LanguageSwitcher />
         </div>
       </header>

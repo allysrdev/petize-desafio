@@ -1,71 +1,18 @@
-import {
-  Button,
-  Heading,
-  Input,
-  InputGroup,
-  InputLeftElement,
-} from "@chakra-ui/react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LuSearch } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
-import { LanguageSwitcher } from "../../components/LanguageSwitcher";
+import { LanguageSwitcher } from "../../components/shared/LanguageSwitcher";
+import { SearchInput } from "../../components/shared/SearchInput";
+import { AppLogo } from "../../components/shared/AppLogo";
+import { useSearch } from "../../hooks/useSearch";
 
 export default function Home() {
-  const [username, setUsername] = useState<string>("");
-  const navigate = useNavigate();
   const { t } = useTranslation("home");
+  const { search } = useSearch();
 
-  const handleSearch = (e?: React.KeyboardEvent) => {
-    if (e?.key === "Enter" && username.trim()) {
-      navigate(`/profile/${username}`);
-    } else if (!e && username.trim()) {
-      navigate(`/profile/${username}`);
-    }
-  };
   return (
     <div className="w-full h-screen flex items-center justify-center flex-col gap-10 p-10">
-      <div className="flex gap-5 w-full items-center justify-center">
-        <Heading
-          className="text-5xl! sm:text-7xl!"
-          fontWeight="normal"
-          color="var(--blue) "
-        >
-          Search
-        </Heading>
-        <Heading
-          className="text-5xl! sm:text-7xl!"
-          fontWeight="normal"
-          color="var(--purple)"
-        >
-          d_evs
-        </Heading>
-      </div>
+      <AppLogo size="lg" />
       <LanguageSwitcher />
-
-      <div className="w-full flex items-center justify-center gap-5">
-        <InputGroup w={{ base: "90%", md: "90%", lg: "592px" }}>
-          <InputLeftElement pointerEvents="none">
-            <LuSearch size={20} />
-          </InputLeftElement>
-          <Input
-            placeholder={t("search")}
-            css={{ "--focus-color": "var(--purple)" }}
-            onKeyDown={(e) => handleSearch(e)}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </InputGroup>
-        <Button
-          backgroundColor="var(--purple)"
-          fontWeight="bold"
-          color="white"
-          w="176px"
-          onClick={() => handleSearch()}
-          display={{ base: "none", lg: "flex" }}
-        >
-          {t("search")}
-        </Button>
-      </div>
+      <SearchInput onSearch={search} placeholder={t("search")} useButton />
     </div>
   );
 }
