@@ -1,4 +1,3 @@
-import { Button, Heading, Spinner, VStack } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGithubUser } from "../../hooks/useGithubUser";
 import { useTranslation } from "react-i18next";
@@ -7,6 +6,8 @@ import RepositoriesList from "../../components/Profile/RepositorysList";
 import { useEffect } from "react";
 import ProfileInfoDesktop from "../../components/Profile/ProfileInfoDesktop";
 import ProfileInfoMobile from "../../components/Profile/ProfileInfoMobile";
+import { Loader } from "../../components/shared/Loader";
+import { ErrorState } from "../../components/shared/ErrorState";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -22,30 +23,17 @@ export default function Profile() {
   }, [username, fetchInitialData]);
 
   if (loadingUser) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <VStack gap={4}>
-          <Spinner size="xl" color="var(--purple)" />
-          <span className="text-lg">{t("profile:loading_user")}</span>
-        </VStack>
-      </div>
-    );
+    return <Loader message={t("profile:loading_user")} />;
   }
 
   if (error) {
     return (
-      <div className="w-full h-screen flex items-center justify-center flex-col gap-5">
-        <Heading>{t("errors:error")}</Heading>
-        <span>{t(`errors:${error}`)}</span>
-        <Button
-          onClick={() => navigate("/")}
-          backgroundColor="var(--purple)"
-          fontWeight="bold"
-          color="white"
-        >
-          {t("errors:new_search")}
-        </Button>
-      </div>
+      <ErrorState
+        title={t("errors:error")}
+        message={t(`errors:${error}`)}
+        onRetry={() => navigate("/")}
+        buttonLabel={t("errors:new_search")}
+      />
     );
   }
   return (
